@@ -14,7 +14,6 @@ const formData = {
 let fromAddAnother = false;
 
 const steps = [
-  renderZip,
   renderBirthdate,
   renderHomeowner,
   renderInsured,
@@ -56,21 +55,6 @@ function updateProgress() {
 
 function backButtonHTML() {
   return currentStep > 0 ? '<button id="back" class="back-btn">Back</button>' : '';
-}
-
-function renderZip() {
-  app.innerHTML = `
-    <h2>Welcome to the AI Insurance Advisors</h2>
-    <input type="text" id="zip" placeholder="Enter ZIP code" maxlength="5" />
-    <button class="option-btn" id="next">Start Quote</button>
-  `;
-  document.getElementById('next').onclick = () => {
-    const zip = document.getElementById('zip').value.trim();
-    if (/^\d{5}$/.test(zip)) {
-      formData.zip = zip;
-      nextStep();
-    }
-  };
 }
 
 function renderBirthdate() {
@@ -268,4 +252,16 @@ function showThankYou() {
   console.log('Collected data:', formData);
 }
 
-renderStep();
+document.getElementById('zip-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const zip = document.getElementById('zip').value.trim();
+  if (/^\d{5}$/.test(zip)) {
+    formData.zip = zip;
+    document.querySelector('.overlay').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('progress-container').classList.remove('hidden');
+    document.querySelector('footer').classList.add('hidden');
+    currentStep = 0;
+    renderStep();
+  }
+});
