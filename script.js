@@ -256,10 +256,17 @@ function showThankYou() {
   console.log('Collected data:', formData);
 }
 
+const zipInput = document.getElementById('zip');
+zipInput.addEventListener('input', () => {
+  document.getElementById('zip-error').classList.add('hidden');
+});
+
 document.getElementById('zip-form').addEventListener('submit', e => {
   e.preventDefault();
-  const zip = document.getElementById('zip').value.trim();
+  const zip = zipInput.value.trim();
+  const errorEl = document.getElementById('zip-error');
   if (/^\d{5}$/.test(zip)) {
+    errorEl.classList.add('hidden');
     formData.zip = zip;
     document.querySelector('.overlay').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
@@ -267,5 +274,8 @@ document.getElementById('zip-form').addEventListener('submit', e => {
     document.querySelector('footer').classList.add('hidden');
     currentStep = 0;
     renderStep();
+  } else {
+    errorEl.classList.remove('hidden');
+    zipInput.focus();
   }
 });
